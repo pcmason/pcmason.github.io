@@ -1,732 +1,724 @@
-{\rtf1\ansi\ansicpg1252\cocoartf2822
-\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;}
-{\*\expandedcolortbl;;}
-\margl1440\margr1440\vieww11520\viewh8400\viewkind0
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Football Picks</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Importing Bungee for a sporty title font and Inter for body text -->
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            /* A repeating linear gradient to create horizontal stripes, mimicking a mowed football field */
+            background-color: #166534; /* Base field color: Green-800 */
+            background-image: repeating-linear-gradient(
+                to bottom,
+                transparent 0,
+                transparent 45px,
+                rgba(0, 0, 0, 0.2) 45px, /* Darker stripe overlay */
+                rgba(0, 0, 0, 0.2) 90px
+            );
+        }
+        /* Class for the sporty, blocky title font */
+        .font-bungee {
+            font-family: 'Bungee', cursive;
+        }
+        /* Custom styles for active nav link in dark mode */
+        .nav-link.active {
+            color: #4ade80; /* Green-400 */
+            border-bottom: 2px solid #4ade80;
+        }
+        /* Style for the table headers with a football theme */
+        .table-header {
+            background-color: #166534; /* Green-800 */
+            color: #f9fafb; /* Gray-50 */
+        }
+        /* Correct/Incorrect pick styling for dark mode */
+        .correct-pick {
+            color: #4ade80; /* Green-400 */
+            font-weight: 600;
+        }
+        .incorrect-pick {
+            color: #f87171; /* Red-400 */
+            font-weight: 600;
+        }
+        /* Styling for the filter dropdown */
+        .filter-select {
+            background-color: #374151; /* Gray-700 */
+            color: #f9fafb; /* Gray-50 */
+            border: 1px solid #4b5563; /* Gray-600 */
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+<body class="text-gray-200">
 
-\f0\fs24 \cf0 <!DOCTYPE html>\
-<html lang="en">\
-<head>\
-    <meta charset="UTF-8">\
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">\
-    <title>AI Football Picks</title>\
-    <script src="https://cdn.tailwindcss.com"></script>\
-    <link rel="preconnect" href="https://fonts.googleapis.com">\
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\
-    <!-- Importing Bungee for a sporty title font and Inter for body text -->\
-    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">\
-    <style>\
-        body \{\
-            font-family: 'Inter', sans-serif;\
-            /* A repeating linear gradient to create horizontal stripes, mimicking a mowed football field */\
-            background-color: #166534; /* Base field color: Green-800 */\
-            background-image: repeating-linear-gradient(\
-                to bottom,\
-                transparent 0,\
-                transparent 45px,\
-                rgba(0, 0, 0, 0.2) 45px, /* Darker stripe overlay */\
-                rgba(0, 0, 0, 0.2) 90px\
-            );\
-        \}\
-        /* Class for the sporty, blocky title font */\
-        .font-bungee \{\
-            font-family: 'Bungee', cursive;\
-        \}\
-        /* Custom styles for active nav link in dark mode */\
-        .nav-link.active \{\
-            color: #4ade80; /* Green-400 */\
-            border-bottom: 2px solid #4ade80;\
-        \}\
-        /* Style for the table headers with a football theme */\
-        .table-header \{\
-            background-color: #166534; /* Green-800 */\
-            color: #f9fafb; /* Gray-50 */\
-        \}\
-        /* Correct/Incorrect pick styling for dark mode */\
-        .correct-pick \{\
-            color: #4ade80; /* Green-400 */\
-            font-weight: 600;\
-        \}\
-        .incorrect-pick \{\
-            color: #f87171; /* Red-400 */\
-            font-weight: 600;\
-        \}\
-        /* Styling for the filter dropdown */\
-        .filter-select \{\
-            background-color: #374151; /* Gray-700 */\
-            color: #f9fafb; /* Gray-50 */\
-            border: 1px solid #4b5563; /* Gray-600 */\
-            border-radius: 0.5rem;\
-        \}\
-    </style>\
-</head>\
-<body class="text-gray-200">\
-\
-    <!-- Header and Navigation -->\
-    <header class="bg-gray-800/80 backdrop-blur-sm shadow-lg sticky top-0 z-50 border-b border-gray-700">\
-        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">\
-            <a href="#home" class="flex items-center">\
-                <!-- Football Icon SVG -->\
-                <svg class="w-9 h-9 mr-3" viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg">\
-                    <ellipse cx="50" cy="30" rx="45" ry="28" fill="#A0522D"/>\
-                    <ellipse cx="50" cy="30" rx="42" ry="26" fill="#8B4513"/>\
-                    <path d="M50 8 L50 52" stroke="white" stroke-width="2.5" stroke-linecap="round"/>\
-                    <path d="M35 18 L65 18" stroke="white" stroke-width="2" stroke-linecap="round"/>\
-                    <path d="M38 24 L62 24" stroke="white" stroke-width="2" stroke-linecap="round"/>\
-                    <path d="M40 30 L60 30" stroke="white" stroke-width="2" stroke-linecap="round"/>\
-                    <path d="M38 36 L62 36" stroke="white" stroke-width="2" stroke-linecap="round"/>\
-                    <path d="M35 42 L65 42" stroke="white" stroke-width="2" stroke-linecap="round"/>\
-                </svg>\
-                <div class="text-2xl text-white font-bungee tracking-wider">Gridiron AI</div>\
-            </a>\
-            <div class="hidden md:flex space-x-8">\
-                <a href="#home" class="nav-link text-gray-300 hover:text-green-400 transition duration-300 active" onclick="showPage('home', this)">Home</a>\
-                <a href="#weekly-picks" class="nav-link text-gray-300 hover:text-green-400 transition duration-300" onclick="showPage('weekly-picks', this)">Weekly Picks</a>\
-                <a href="#model1" class="nav-link text-gray-300 hover:text-green-400 transition duration-300" onclick="showPage('model1', this)">Regular Memory Model</a>\
-                <a href="#model2" class="nav-link text-gray-300 hover:text-green-400 transition duration-300" onclick="showPage('model2', this)">Long Memory Model</a>\
-                <a href="#model3" class="nav-link text-gray-300 hover:text-green-400 transition duration-300" onclick="showPage('model3', this)">Short Memory Model</a>\
-            </div>\
-             <!-- Mobile Menu Button -->\
-            <button id="mobile-menu-button" class="md:hidden text-gray-300 focus:outline-none">\
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>\
-            </button>\
-        </nav>\
-         <!-- Mobile Menu -->\
-        <div id="mobile-menu" class="hidden md:hidden bg-gray-800/90 px-6 pb-4">\
-            <a href="#home" class="block py-2 text-gray-300 hover:text-green-400" onclick="showPage('home', this); toggleMenu();">Home</a>\
-            <a href="#weekly-picks" class="block py-2 text-gray-300 hover:text-green-400" onclick="showPage('weekly-picks', this); toggleMenu();">Weekly Picks</a>\
-            <a href="#model1" class="block py-2 text-gray-300 hover:text-green-400" onclick="showPage('model1', this); toggleMenu();">Regular Memory Model</a>\
-            <a href="#model2" class="block py-2 text-gray-300 hover:text-green-400" onclick="showPage('model2', this); toggleMenu();">Long Memory Model</a>\
-            <a href="#model3" class="block py-2 text-gray-300 hover:text-green-400" onclick="showPage('model3', this); toggleMenu();">Short Memory Model</a>\
-        </div>\
-    </header>\
-\
-    <!-- Main content area with a solid background for readability -->\
-    <div class="container mx-auto p-4 md:p-8 mt-6 bg-gray-900/70 backdrop-blur-sm rounded-xl border border-gray-700">\
-        <main>\
-            <!-- Home Page: Current Predictions -->\
-            <div id="home" class="page">\
-                <h1 class="font-bungee text-4xl mb-2 text-center text-white">This Week's Slate</h1>\
-                <p class="text-center text-gray-400 mb-8">Top picks for the upcoming NFL games</p>\
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">\
-                    \
-                    <!-- Regular Memory Model Card -->\
-                    <div class="bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-700 transform hover:scale-105 transition-transform duration-300">\
-                        <h2 class="font-bungee text-2xl mb-4 border-b border-gray-600 pb-2 text-white">Regular Memory Model</h2>\
-                        <div class="space-y-3 text-gray-300">\
-                            <p><span class="font-semibold text-gray-100">Top Pick:</span> <span id="home-pick-alpha">Loading...</span></p>\
-                            <p><span class="font-semibold text-gray-100">Opponent:</span> <span id="home-opponent-alpha">Loading...</span></p>\
-                            <p><span class="font-semibold text-gray-100">Confidence:</span> <span id="home-confidence-alpha">Loading...</span></p>\
-                            <p class="mt-4 pt-4 border-t border-gray-600"><span class="font-semibold text-gray-100">Overall Success:</span> <span id="home-success-alpha">Loading...</span></p>\
-                        </div>\
-                    </div>\
-\
-                    <!-- Long Memory Model Card -->\
-                    <div class="bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-700 transform hover:scale-105 transition-transform duration-300">\
-                        <h2 class="font-bungee text-2xl mb-4 border-b border-gray-600 pb-2 text-white">Long Memory Model</h2>\
-                        <div class="space-y-3 text-gray-300">\
-                            <p><span class="font-semibold text-gray-100">Top Pick:</span> <span id="home-pick-beta">Loading...</span></p>\
-                            <p><span class="font-semibold text-gray-100">Opponent:</span> <span id="home-opponent-beta">Loading...</span></p>\
-                            <p><span class="font-semibold text-gray-100">Confidence:</span> <span id="home-confidence-beta">Loading...</span></p>\
-                            <p class="mt-4 pt-4 border-t border-gray-600"><span class="font-semibold text-gray-100">Overall Success:</span> <span id="home-success-beta">Loading...</span></p>\
-                        </div>\
-                    </div>\
-\
-                    <!-- Short Memory Model Card -->\
-                    <div class="bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-700 transform hover:scale-105 transition-transform duration-300">\
-                        <h2 class="font-bungee text-2xl mb-4 border-b border-gray-600 pb-2 text-white">Short Memory Model</h2>\
-                        <div class="space-y-3 text-gray-300">\
-                             <p><span class="font-semibold text-gray-100">Top Pick:</span> <span id="home-pick-gamma">Loading...</span></p>\
-                            <p><span class="font-semibold text-gray-100">Opponent:</span> <span id="home-opponent-gamma">Loading...</span></p>\
-                            <p><span class="font-semibold text-gray-100">Confidence:</span> <span id="home-confidence-gamma">Loading...</span></p>\
-                            <p class="mt-4 pt-4 border-t border-gray-600"><span class="font-semibold text-gray-100">Overall Success:</span> <span id="home-success-gamma">Loading...</span></p>\
-                        </div>\
-                    </div>\
-\
-                </div>\
-            </div>\
-\
-             <!-- Weekly Picks Page -->\
-            <div id="weekly-picks" class="page hidden">\
-                <h1 class="font-bungee text-4xl mb-8 text-center text-white">Consolidated Weekly Picks</h1>\
-                <div class="bg-gray-800 rounded-lg shadow-lg overflow-x-auto border border-gray-700">\
-                    <table class="min-w-full text-sm">\
-                        <thead class="table-header">\
-                            <tr>\
-                                <th class="py-3 px-4 text-left">Game</th>\
-                                <th class="py-3 px-4 text-left">Regular Memory Model</th>\
-                                <th class="py-3 px-4 text-left">Long Memory Model</th>\
-                                <th class="py-3 px-4 text-left">Short Memory Model</th>\
-                            </tr>\
-                        </thead>\
-                        <tbody id="weekly-picks-data" class="divide-y divide-gray-700">\
-                           <tr><td colspan="4" class="text-center p-8">Loading weekly picks...</td></tr>\
-                        </tbody>\
-                    </table>\
-                </div>\
-            </div>\
-\
-\
-            <!-- Regular Memory Model Page -->\
-            <div id="model1" class="page hidden">\
-                <h1 class="font-bungee text-4xl mb-2 text-center text-white">Regular Memory Model</h1>\
-                <h2 class="font-bungee text-3xl mt-8 mb-4 text-center text-white">Current Week Predictions</h2>\
-                <div class="bg-gray-800 rounded-lg shadow-lg overflow-x-auto border border-gray-700 mb-12">\
-                     <table class="min-w-full text-sm">\
-                        <thead class="table-header">\
-                            <tr>\
-                                <th class="py-3 px-4 text-left">Current Week</th>\
-                                <th class="py-3 px-4 text-left">Model's Pick</th>\
-                                <th class="py-3 px-4 text-left">Opponent</th>\
-                                <th class="py-3 px-4 text-left">Model's Confidence</th>\
-                            </tr>\
-                        </thead>\
-                        <tbody id="model1-current-data" class="divide-y divide-gray-700">\
-                           <tr><td colspan="4" class="text-center p-8">Loading current predictions...</td></tr>\
-                        </tbody>\
-                    </table>\
-                </div>\
-                <h2 class="font-bungee text-3xl mt-8 mb-2 text-center text-white">Model History</h2>\
-                <h3 id="success-rate-alpha" class="text-2xl text-center text-gray-300 mb-6"></h3>\
-                <div class="mb-4 flex justify-end space-x-4">\
-                    <div>\
-                        <label for="season-filter-alpha" class="mr-2 self-center">Filter by Season:</label>\
-                        <select id="season-filter-alpha" class="filter-select p-2"></select>\
-                    </div>\
-                    <div>\
-                        <label for="week-filter-alpha" class="mr-2 self-center">Filter by Week:</label>\
-                        <select id="week-filter-alpha" class="filter-select p-2"></select>\
-                    </div>\
-                </div>\
-                <div class="bg-gray-800 rounded-lg shadow-lg overflow-x-auto border border-gray-700">\
-                    <table class="min-w-full text-sm">\
-                        <thead class="table-header">\
-                            <tr>\
-                                <th class="py-3 px-4 text-left">NFL Season</th>\
-                                <th class="py-3 px-4 text-left">Week</th>\
-                                <th class="py-3 px-4 text-left">Predicted Winner</th>\
-                                <th class="py-3 px-4 text-left">Confidence</th>\
-                                <th class="py-3 px-4 text-left">Result</th>\
-                            </tr>\
-                        </thead>\
-                        <tbody id="model1-data" class="divide-y divide-gray-700">\
-                            <tr><td colspan="5" class="text-center p-8">Loading data from Google Sheet...</td></tr>\
-                        </tbody>\
-                    </table>\
-                </div>\
-            </div>\
-\
-            <!-- Long Memory Model Page -->\
-            <div id="model2" class="page hidden">\
-                <h1 class="font-bungee text-4xl mb-2 text-center text-white">Long Memory Model</h1>\
-                 <h2 class="font-bungee text-3xl mt-8 mb-4 text-center text-white">Current Week Predictions</h2>\
-                <div class="bg-gray-800 rounded-lg shadow-lg overflow-x-auto border border-gray-700 mb-12">\
-                     <table class="min-w-full text-sm">\
-                        <thead class="table-header">\
-                            <tr>\
-                                <th class="py-3 px-4 text-left">Current Week</th>\
-                                <th class="py-3 px-4 text-left">Model's Pick</th>\
-                                <th class="py-3 px-4 text-left">Opponent</th>\
-                                <th class="py-3 px-4 text-left">Model's Confidence</th>\
-                            </tr>\
-                        </thead>\
-                        <tbody id="model2-current-data" class="divide-y divide-gray-700">\
-                           <tr><td colspan="4" class="text-center p-8">Loading current predictions...</td></tr>\
-                        </tbody>\
-                    </table>\
-                </div>\
-                <h2 class="font-bungee text-3xl mt-8 mb-2 text-center text-white">Model History</h2>\
-                <h3 id="success-rate-beta" class="text-2xl text-center text-gray-300 mb-6"></h3>\
-                <div class="mb-4 flex justify-end space-x-4">\
-                    <div>\
-                        <label for="season-filter-beta" class="mr-2 self-center">Filter by Season:</label>\
-                        <select id="season-filter-beta" class="filter-select p-2"></select>\
-                    </div>\
-                    <div>\
-                        <label for="week-filter-beta" class="mr-2 self-center">Filter by Week:</label>\
-                        <select id="week-filter-beta" class="filter-select p-2"></select>\
-                    </div>\
-                </div>\
-                <div class="bg-gray-800 rounded-lg shadow-lg overflow-x-auto border border-gray-700">\
-                    <table class="min-w-full text-sm">\
-                        <thead class="table-header">\
-                            <tr>\
-                                <th class="py-3 px-4 text-left">NFL Season</th>\
-                                <th class="py-3 px-4 text-left">Week</th>\
-                                <th class="py-3 px-4 text-left">Predicted Winner</th>\
-                                <th class="py-3 px-4 text-left">Confidence</th>\
-                                <th class="py-3 px-4 text-left">Result</th>\
-                            </tr>\
-                        </thead>\
-                        <tbody id="model2-data" class="divide-y divide-gray-700">\
-                            <tr><td colspan="5" class="text-center p-8">Loading data from Google Sheet...</td></tr>\
-                        </tbody>\
-                    </table>\
-                </div>\
-            </div>\
-\
-            <!-- Short Memory Model Page -->\
-            <div id="model3" class="page hidden">\
-                <h1 class="font-bungee text-4xl mb-2 text-center text-white">Short Memory Model</h1>\
-                <h2 class="font-bungee text-3xl mt-8 mb-4 text-center text-white">Current Week Predictions</h2>\
-                <div class="bg-gray-800 rounded-lg shadow-lg overflow-x-auto border border-gray-700 mb-12">\
-                    <table class="min-w-full text-sm">\
-                        <thead class="table-header">\
-                            <tr>\
-                                <th class="py-3 px-4 text-left">Current Week</th>\
-                                <th class="py-3 px-4 text-left">Model's Pick</th>\
-                                <th class="py-3 px-4 text-left">Opponent</th>\
-                                <th class="py-3 px-4 text-left">Model's Confidence</th>\
-                            </tr>\
-                        </thead>\
-                        <tbody id="model3-current-data" class="divide-y divide-gray-700">\
-                           <tr><td colspan="4" class="text-center p-8">Loading current predictions...</td></tr>\
-                        </tbody>\
-                    </table>\
-                </div>\
-                <h2 class="font-bungee text-3xl mt-8 mb-2 text-center text-white">Model History</h2>\
-                <h3 id="success-rate-gamma" class="text-2xl text-center text-gray-300 mb-6"></h3>\
-                 <div class="mb-4 flex justify-end space-x-4">\
-                    <div>\
-                        <label for="season-filter-gamma" class="mr-2 self-center">Filter by Season:</label>\
-                        <select id="season-filter-gamma" class="filter-select p-2"></select>\
-                    </div>\
-                    <div>\
-                        <label for="week-filter-gamma" class="mr-2 self-center">Filter by Week:</label>\
-                        <select id="week-filter-gamma" class="filter-select p-2"></select>\
-                    </div>\
-                </div>\
-                <div class="bg-gray-800 rounded-lg shadow-lg overflow-x-auto border border-gray-700">\
-                    <table class="min-w-full text-sm">\
-                         <thead class="table-header">\
-                            <tr>\
-                                <th class="py-3 px-4 text-left">NFL Season</th>\
-                                <th class="py-3 px-4 text-left">Week</th>\
-                                <th class="py-3 px-4 text-left">Predicted Winner</th>\
-                                <th class="py-3 px-4 text-left">Confidence</th>\
-                                <th class="py-3 px-4 text-left">Result</th>\
-                            </tr>\
-                        </thead>\
-                        <tbody id="model3-data" class="divide-y divide-gray-700">\
-                           <tr><td colspan="5" class="text-center p-8">Loading data from Google Sheet...</td></tr>\
-                        </tbody>\
-                    </table>\
-                </div>\
-            </div>\
-        </main>\
-    </div>\
-\
-    <!-- Footer -->\
-    <footer class="text-center py-8">\
-        <p class="text-gray-300 text-sm">\
-            If you feel inclined to compensate me financially for these picks that can be done \
-            <a href="https://buymeacoffee.com/ai_nfl_predictor" target="_blank" rel="noopener noreferrer" class="text-green-400 hover:underline">here</a>.\
-        </p>\
-    </footer>\
-\
-\
-    <script>\
-        // Store parsed data globally to avoid re-parsing\
-        let parsedDataAlpha = \{ history: [], current: [] \};\
-        let parsedDataBeta = \{ history: [], current: [] \};\
-        let parsedDataGamma = \{ history: [], current: [] \};\
-        let weeklyPicks = \{\};\
-\
-        // --- Page Navigation Logic ---\
-        const pages = document.querySelectorAll('.page');\
-        const navLinks = document.querySelectorAll('.nav-link');\
-\
-        function showPage(pageId, clickedLink) \{\
-            pages.forEach(page => page.classList.add('hidden'));\
-            const activePage = document.getElementById(pageId);\
-            if (activePage) activePage.classList.remove('hidden');\
-            \
-            navLinks.forEach(link => link.classList.remove('active'));\
-            if (clickedLink) \{\
-                const targetHref = clickedLink.getAttribute('href');\
-                document.querySelectorAll(`.nav-link[href='$\{targetHref\}']`).forEach(link => \{\
-                    link.classList.add('active');\
-                \});\
-            \}\
-        \}\
-\
-        // --- Mobile Menu Logic ---\
-        const mobileMenuButton = document.getElementById('mobile-menu-button');\
-        const mobileMenu = document.getElementById('mobile-menu');\
-        mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));\
-        \
-        // --- Generic function to render a table and update success rate ---\
-        function renderTable(model) \{\
-            const \{ data, seasonFilterId, weekFilterId, tableBodyId, successRateId \} = model;\
-            const seasonFilter = document.getElementById(seasonFilterId);\
-            const weekFilter = document.getElementById(weekFilterId);\
-            const tableBody = document.getElementById(tableBodyId);\
-            const successRateEl = document.getElementById(successRateId);\
-\
-            if (!tableBody || !successRateEl || !seasonFilter || !weekFilter) return;\
-            \
-            const filterSeason = seasonFilter.value;\
-            const filterWeek = weekFilter.value;\
-\
-            tableBody.innerHTML = '';\
-            \
-            let filteredRows = data;\
-            if (filterSeason !== 'all') \{\
-                filteredRows = filteredRows.filter(row => row[0] === filterSeason);\
-            \}\
-            if (filterWeek !== 'all') \{\
-                filteredRows = filteredRows.filter(row => row[1] === filterWeek);\
-            \}\
-\
-            const correctPredictions = filteredRows.filter(row => row[4] === 'TRUE').length;\
-            const totalPredictions = filteredRows.length;\
-\
-            let successLabel = 'Overall';\
-            if (filterSeason !== 'all') \{\
-                successLabel = `$\{filterSeason\} Season`;\
-                if (filterWeek !== 'all') \{\
-                    successLabel += `, $\{filterWeek\}`;\
-                \}\
-            \} else if (filterWeek !== 'all') \{\
-                 successLabel = `All Seasons, $\{filterWeek\}`;\
-            \}\
-\
-            if (totalPredictions > 0) \{\
-                const percentage = (correctPredictions / totalPredictions) * 100;\
-                successRateEl.innerHTML = `$\{successLabel\} Success Rate: <span class="correct-pick">$\{percentage.toFixed(2)\}%</span> ($\{correctPredictions\}/$\{totalPredictions\})`;\
-            \} else \{\
-                successRateEl.textContent = 'No prediction data available for this selection.';\
-            \}\
-\
-            if (filteredRows.length === 0) \{\
-                tableBody.innerHTML = '<tr><td colspan="5" class="text-center p-8">No data found for this selection.</td></tr>';\
-                return;\
-            \}\
-\
-            filteredRows.forEach((columns, index) => \{\
-                const [nflSeason, week, predictedWinner, confidence, score] = columns;\
-                const resultText = score === 'TRUE' ? 'Correct' : 'Incorrect';\
-                const resultClass = score === 'TRUE' ? 'correct-pick' : 'incorrect-pick';\
-                const rowBgClass = index % 2 === 0 ? '' : 'bg-gray-900/50';\
-\
-                const tr = document.createElement('tr');\
-                tr.className = rowBgClass;\
-                tr.innerHTML = `\
-                    <td class="py-3 px-4">$\{nflSeason\}</td>\
-                    <td class="py-3 px-4">$\{week\}</td>\
-                    <td class="py-3 px-4">$\{predictedWinner\}</td>\
-                    <td class="py-3 px-4">$\{confidence\}</td>\
-                    <td class="py-3 px-4 $\{resultClass\}">$\{resultText\}</td>\
-                `;\
-                tableBody.appendChild(tr);\
-            \});\
-        \}\
-\
-        function updateWeekFilter(model) \{\
-            const \{ data, seasonFilterId, weekFilterId \} = model;\
-            const seasonFilter = document.getElementById(seasonFilterId);\
-            const weekFilter = document.getElementById(weekFilterId);\
-            const selectedSeason = seasonFilter.value;\
-\
-            const relevantRows = selectedSeason === 'all' \
-                ? data \
-                : data.filter(row => row[0] === selectedSeason);\
-            \
-            const weeks = [...new Set(relevantRows.map(row => row[1]))];\
-            weekFilter.innerHTML = '<option value="all">All Weeks</option>';\
-            weeks.forEach(week => \{\
-                const option = document.createElement('option');\
-                option.value = week;\
-                option.textContent = week;\
-                weekFilter.appendChild(option);\
-            \});\
-        \}\
-        \
-        function renderCurrentPredictions(model) \{\
-            const \{ currentData, currentTableBodyId \} = model;\
-            const tableBody = document.getElementById(currentTableBodyId);\
-            if (!tableBody) return;\
-\
-            tableBody.innerHTML = '';\
-            if (currentData.length === 0) \{\
-                tableBody.innerHTML = '<tr><td colspan="4" class="text-center p-8">No current predictions found.</td></tr>';\
-                return;\
-            \}\
-\
-            currentData.forEach((columns, index) => \{\
-                const [week, pick, opponent, confidence] = columns;\
-                const rowBgClass = index % 2 === 0 ? '' : 'bg-gray-900/50';\
-                const tr = document.createElement('tr');\
-                tr.className = rowBgClass;\
-                tr.innerHTML = `\
-                    <td class="py-3 px-4">$\{week\}</td>\
-                    <td class="py-3 px-4">$\{pick\}</td>\
-                    <td class="py-3 px-4">$\{opponent\}</td>\
-                    <td class="py-3 px-4">$\{confidence\}</td>\
-                `;\
-                tableBody.appendChild(tr);\
-            \});\
-        \}\
-        \
-        function renderWeeklyPicks() \{\
-            const tableBody = document.getElementById('weekly-picks-data');\
-            if (!tableBody) return;\
-            tableBody.innerHTML = '';\
-            \
-            const games = Object.values(weeklyPicks);\
-            if (games.length === 0) \{\
-                tableBody.innerHTML = '<tr><td colspan="4" class="text-center p-8">No weekly picks available.</td></tr>';\
-                return;\
-            \}\
-\
-            games.forEach((game, index) => \{\
-                const rowBgClass = index % 2 === 0 ? '' : 'bg-gray-900/50';\
-                const tr = document.createElement('tr');\
-                tr.className = rowBgClass;\
-                tr.innerHTML = `\
-                    <td class="py-3 px-4">$\{game.game\}</td>\
-                    <td class="py-3 px-4">$\{game.modelAlpha\}</td>\
-                    <td class="py-3 px-4">$\{game.modelBeta\}</td>\
-                    <td class="py-3 px-4">$\{game.modelGamma\}</td>\
-                `;\
-                tableBody.appendChild(tr);\
-            \});\
-        \}\
-\
-        // --- Generic function to fetch and process data for a model ---\
-        async function setupModelPage(model) \{\
-            const \{ sheetId, gid, dataTarget, seasonFilterId, weekFilterId, tableBodyId, successRateId, currentGid, currentTableBodyId, homeCardIds, modelKey \} = model;\
-            const url = `https://docs.google.com/spreadsheets/d/$\{sheetId\}/gviz/tq?tqx=out:json&gid=$\{gid\}`;\
-            \
-            const tableBody = document.getElementById(tableBodyId);\
-            const seasonFilter = document.getElementById(seasonFilterId);\
-            const weekFilter = document.getElementById(weekFilterId);\
-            const getCellVal = (cell) => cell ? (cell.f !== undefined && cell.f !== null ? cell.f : cell.v) : null;\
-\
-            try \{\
-                const response = await fetch(url);\
-                if (!response.ok) throw new Error('Network response was not ok');\
-                const responseText = await response.text();\
-                \
-                const jsonString = responseText.substring(responseText.indexOf('(') + 1, responseText.lastIndexOf(')'));\
-                const json = JSON.parse(jsonString);\
-                const dataRows = json.table.rows;\
-                \
-                let lastSeason = '';\
-                const historicalData = [];\
-                \
-                dataRows.forEach(row => \{\
-                    const allColumns = row.c.map(getCellVal);\
-\
-                    if (allColumns[0] !== null || allColumns[1] !== null) \{\
-                        let currentSeason = allColumns[7];\
-                        if (currentSeason && String(currentSeason).trim() !== '') \{\
-                            lastSeason = currentSeason;\
-                        \} else \{\
-                            currentSeason = lastSeason;\
-                        \}\
-                        \
-                        let week = String(allColumns[0]).trim();\
-                        if (week === '' || week === 'null') \{\
-                           const playoffWeek = String(allColumns[1]).trim();\
-                           if (["Wildcard", "Divisional", "Conference", "Super Bowl"].includes(playoffWeek)) \{\
-                               week = playoffWeek;\
-                           \} else if (playoffWeek && playoffWeek !== 'null') \{\
-                               week = "Playoffs";\
-                           \}\
-                        \}\
-\
-                        if (week && allColumns[1] && currentSeason) \{\
-                             historicalData.push([\
-                                currentSeason,\
-                                week,\
-                                allColumns[1],\
-                                allColumns[5],\
-                                String(allColumns[3]).toUpperCase()\
-                            ]);\
-                        \}\
-                    \}\
-                \});\
-\
-                model[dataTarget] = historicalData;\
-\
-                const seasons = [...new Set(model[dataTarget].map(row => row[0]))];\
-                seasonFilter.innerHTML = '<option value="all">All Seasons</option>';\
-                seasons.forEach(season => \{\
-                    const option = document.createElement('option');\
-                    option.value = season;\
-                    option.textContent = season;\
-                    seasonFilter.appendChild(option);\
-                \});\
-\
-                updateWeekFilter(model);\
-                \
-                seasonFilter.addEventListener('change', () => \{\
-                    updateWeekFilter(model);\
-                    renderTable(model);\
-                \});\
-                weekFilter.addEventListener('change', () => renderTable(model));\
-\
-                renderTable(model);\
-\
-            \} catch (error) \{\
-                console.error(`Error for $\{model.name\}:`, error);\
-                if (tableBody) tableBody.innerHTML = `<tr><td colspan="5" class="text-center p-8 text-red-400">Failed to load data for $\{model.name\}.</td></tr>`;\
-                document.getElementById(successRateId).textContent = `Could not calculate success rate for $\{model.name\}.`;\
-            \}\
-\
-            // Fetch current predictions if applicable\
-            if (currentGid && currentTableBodyId) \{\
-                const currentUrl = `https://docs.google.com/spreadsheets/d/$\{sheetId\}/gviz/tq?tqx=out:json&gid=$\{currentGid\}`;\
-                try \{\
-                    const currentResponse = await fetch(currentUrl);\
-                    if (!currentResponse.ok) throw new Error('Network response for current predictions was not ok');\
-                    const currentText = await currentResponse.text();\
-                    const currentJsonString = currentText.substring(currentText.indexOf('(') + 1, currentText.lastIndexOf(')'));\
-                    const currentJson = JSON.parse(currentJsonString);\
-                    const currentRows = currentJson.table.rows;\
-\
-                    model.currentData = currentRows.map(row => \{\
-                        const allColumns = row.c.map(getCellVal);\
-                        return [\
-                            allColumns[0], // Column A\
-                            allColumns[1], // Column B\
-                            allColumns[2], // Column C\
-                            allColumns[3]  // Column D\
-                        ];\
-                    \}).filter(row => row[0] && row[0].trim() !== '');\
-\
-                    renderCurrentPredictions(model);\
-                    \
-                    // Update homepage card and consolidated picks\
-                    if (homeCardIds) \{\
-                        const correct = model.data.filter(row => row[4] === 'TRUE').length;\
-                        const total = model.data.length;\
-                        const successRate = total > 0 ? (correct / total * 100).toFixed(2) + '%' : 'N/A';\
-                        document.getElementById(homeCardIds.success).textContent = successRate;\
-\
-                        let topPick = \{ pick: 'N/A', opponent: 'N/A', confidence: 'N/A', confidenceVal: 0 \};\
-                        model.currentData.forEach(row => \{\
-                            const [week, pick, opponent, confidence] = row;\
-                            const confidenceVal = parseFloat(confidence);\
-                            if (confidenceVal > topPick.confidenceVal) \{\
-                                topPick = \{ pick, opponent, confidence, confidenceVal \};\
-                            \}\
-                            \
-                            // Consolidate picks\
-                            const gameKey = [pick, opponent].sort().join(' vs ');\
-                            if (!weeklyPicks[gameKey]) \{\
-                                weeklyPicks[gameKey] = \{ game: `$\{pick\} vs. $\{opponent\}`, modelAlpha: 'N/A', modelBeta: 'N/A', modelGamma: 'N/A' \};\
-                            \}\
-                            weeklyPicks[gameKey][modelKey] = pick;\
-                        \});\
-                        document.getElementById(homeCardIds.pick).textContent = topPick.pick;\
-                        document.getElementById(homeCardIds.opponent).textContent = topPick.opponent;\
-                        document.getElementById(homeCardIds.confidence).textContent = topPick.confidence;\
-                    \}\
-\
-\
-                \} catch (error) \{\
-                    console.error(`Error for $\{model.name\} current predictions:`, error);\
-                    const currentTableBody = document.getElementById(currentTableBodyId);\
-                    if (currentTableBody) currentTableBody.innerHTML = `<tr><td colspan="4" class="text-center p-8 text-red-400">Failed to load current predictions.</td></tr>`;\
-                \}\
-            \}\
-        \}\
-\
-        // --- Initial Page Load ---\
-        window.addEventListener('DOMContentLoaded', async () => \{\
-            const modelAlpha = \{\
-                name: 'Regular Memory Model',\
-                sheetId: '1KkDk8IM11Ld3qLuABnd_DaqyrlRoyezNi6tlcsK9MLU',\
-                gid: '0',\
-                currentGid: '178307126',\
-                data: parsedDataAlpha.history,\
-                currentData: parsedDataAlpha.current,\
-                dataTarget: 'data',\
-                seasonFilterId: 'season-filter-alpha',\
-                weekFilterId: 'week-filter-alpha',\
-                tableBodyId: 'model1-data',\
-                successRateId: 'success-rate-alpha',\
-                currentTableBodyId: 'model1-current-data',\
-                modelKey: 'modelAlpha',\
-                homeCardIds: \{\
-                    pick: 'home-pick-alpha',\
-                    opponent: 'home-opponent-alpha',\
-                    confidence: 'home-confidence-alpha',\
-                    success: 'home-success-alpha'\
-                \}\
-            \};\
-\
-            const modelBeta = \{\
-                name: 'Long Memory Model',\
-                sheetId: '1KkDk8IM11Ld3qLuABnd_DaqyrlRoyezNi6tlcsK9MLU',\
-                gid: '1614401839',\
-                currentGid: '1412186829',\
-                data: parsedDataBeta.history,\
-                currentData: parsedDataBeta.current,\
-                dataTarget: 'data',\
-                seasonFilterId: 'season-filter-beta',\
-                weekFilterId: 'week-filter-beta',\
-                tableBodyId: 'model2-data',\
-                successRateId: 'success-rate-beta',\
-                currentTableBodyId: 'model2-current-data',\
-                 modelKey: 'modelBeta',\
-                homeCardIds: \{\
-                    pick: 'home-pick-beta',\
-                    opponent: 'home-opponent-beta',\
-                    confidence: 'home-confidence-beta',\
-                    success: 'home-success-beta'\
-                \}\
-            \};\
-\
-            const modelGamma = \{\
-                name: 'Short Memory Model',\
-                sheetId: '1KkDk8IM11Ld3qLuABnd_DaqyrlRoyezNi6tlcsK9MLU',\
-                gid: '1391004388',\
-                currentGid: '1491301748',\
-                data: parsedDataGamma.history,\
-                currentData: parsedDataGamma.current,\
-                dataTarget: 'data',\
-                seasonFilterId: 'season-filter-gamma',\
-                weekFilterId: 'week-filter-gamma',\
-                tableBodyId: 'model3-data',\
-                successRateId: 'success-rate-gamma',\
-                currentTableBodyId: 'model3-current-data',\
-                modelKey: 'modelGamma',\
-                homeCardIds: \{\
-                    pick: 'home-pick-gamma',\
-                    opponent: 'home-opponent-gamma',\
-                    confidence: 'home-confidence-gamma',\
-                    success: 'home-success-gamma'\
-                \}\
-            \};\
-\
-            await Promise.all([\
-                setupModelPage(modelAlpha),\
-                setupModelPage(modelBeta),\
-                setupModelPage(modelGamma)\
-            ]);\
-            \
-            renderWeeklyPicks();\
-\
-            const hash = window.location.hash.substring(1);\
-            if (hash && document.getElementById(hash)) \{\
-                const link = document.querySelector(`.nav-link[href='#$\{hash\}']`);\
-                showPage(hash, link);\
-            \} else \{\
-                showPage('home', document.querySelector('.nav-link[href="#home"]'));\
-            \}\
-        \});\
-\
-        // Update page on hash change\
-        window.addEventListener('hashchange', () => \{\
-            const hash = window.location.hash.substring(1);\
-            const link = document.querySelector(`.nav-link[href='#$\{hash\}']`);\
-            showPage(hash || 'home', link || document.querySelector('.nav-link[href="#home"]'));\
-        \});\
-    </script>\
-</body>\
-</html>\
-}
+    <!-- Header and Navigation -->
+    <header class="bg-gray-800/80 backdrop-blur-sm shadow-lg sticky top-0 z-50 border-b border-gray-700">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="#home" class="flex items-center">
+                <!-- Football Icon SVG -->
+                <svg class="w-9 h-9 mr-3" viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg">
+                    <ellipse cx="50" cy="30" rx="45" ry="28" fill="#A0522D"/>
+                    <ellipse cx="50" cy="30" rx="42" ry="26" fill="#8B4513"/>
+                    <path d="M50 8 L50 52" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M35 18 L65 18" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M38 24 L62 24" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M40 30 L60 30" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M38 36 L62 36" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M35 42 L65 42" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <div class="text-2xl text-white font-bungee tracking-wider">Gridiron AI</div>
+            </a>
+            <div class="hidden md:flex space-x-8">
+                <a href="#home" class="nav-link text-gray-300 hover:text-green-400 transition duration-300 active" onclick="showPage('home', this)">Home</a>
+                <a href="#weekly-picks" class="nav-link text-gray-300 hover:text-green-400 transition duration-300" onclick="showPage('weekly-picks', this)">Weekly Picks</a>
+                <a href="#model1" class="nav-link text-gray-300 hover:text-green-400 transition duration-300" onclick="showPage('model1', this)">Regular Memory Model</a>
+                <a href="#model2" class="nav-link text-gray-300 hover:text-green-400 transition duration-300" onclick="showPage('model2', this)">Long Memory Model</a>
+                <a href="#model3" class="nav-link text-gray-300 hover:text-green-400 transition duration-300" onclick="showPage('model3', this)">Short Memory Model</a>
+            </div>
+             <!-- Mobile Menu Button -->
+            <button id="mobile-menu-button" class="md:hidden text-gray-300 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+         <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-gray-800/90 px-6 pb-4">
+            <a href="#home" class="block py-2 text-gray-300 hover:text-green-400" onclick="showPage('home', this); toggleMenu();">Home</a>
+            <a href="#weekly-picks" class="block py-2 text-gray-300 hover:text-green-400" onclick="showPage('weekly-picks', this); toggleMenu();">Weekly Picks</a>
+            <a href="#model1" class="block py-2 text-gray-300 hover:text-green-400" onclick="showPage('model1', this); toggleMenu();">Regular Memory Model</a>
+            <a href="#model2" class="block py-2 text-gray-300 hover:text-green-400" onclick="showPage('model2', this); toggleMenu();">Long Memory Model</a>
+            <a href="#model3" class="block py-2 text-gray-300 hover:text-green-400" onclick="showPage('model3', this); toggleMenu();">Short Memory Model</a>
+        </div>
+    </header>
+
+    <!-- Main content area with a solid background for readability -->
+    <div class="container mx-auto p-4 md:p-8 mt-6 bg-gray-900/70 backdrop-blur-sm rounded-xl border border-gray-700">
+        <main>
+            <!-- Home Page: Current Predictions -->
+            <div id="home" class="page">
+                <h1 class="font-bungee text-4xl mb-2 text-center text-white">This Week's Slate</h1>
+                <p class="text-center text-gray-400 mb-8">Top picks for the upcoming NFL games</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Regular Memory Model Card -->
+                    <div class="bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-700 transform hover:scale-105 transition-transform duration-300">
+                        <h2 class="font-bungee text-2xl mb-4 border-b border-gray-600 pb-2 text-white">Regular Memory Model</h2>
+                        <div class="space-y-3 text-gray-300">
+                            <p><span class="font-semibold text-gray-100">Top Pick:</span> <span id="home-pick-alpha">Loading...</span></p>
+                            <p><span class="font-semibold text-gray-100">Opponent:</span> <span id="home-opponent-alpha">Loading...</span></p>
+                            <p><span class="font-semibold text-gray-100">Confidence:</span> <span id="home-confidence-alpha">Loading...</span></p>
+                            <p class="mt-4 pt-4 border-t border-gray-600"><span class="font-semibold text-gray-100">Overall Success:</span> <span id="home-success-alpha">Loading...</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Long Memory Model Card -->
+                    <div class="bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-700 transform hover:scale-105 transition-transform duration-300">
+                        <h2 class="font-bungee text-2xl mb-4 border-b border-gray-600 pb-2 text-white">Long Memory Model</h2>
+                        <div class="space-y-3 text-gray-300">
+                            <p><span class="font-semibold text-gray-100">Top Pick:</span> <span id="home-pick-beta">Loading...</span></p>
+                            <p><span class="font-semibold text-gray-100">Opponent:</span> <span id="home-opponent-beta">Loading...</span></p>
+                            <p><span class="font-semibold text-gray-100">Confidence:</span> <span id="home-confidence-beta">Loading...</span></p>
+                            <p class="mt-4 pt-4 border-t border-gray-600"><span class="font-semibold text-gray-100">Overall Success:</span> <span id="home-success-beta">Loading...</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Short Memory Model Card -->
+                    <div class="bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-700 transform hover:scale-105 transition-transform duration-300">
+                        <h2 class="font-bungee text-2xl mb-4 border-b border-gray-600 pb-2 text-white">Short Memory Model</h2>
+                        <div class="space-y-3 text-gray-300">
+                             <p><span class="font-semibold text-gray-100">Top Pick:</span> <span id="home-pick-gamma">Loading...</span></p>
+                            <p><span class="font-semibold text-gray-100">Opponent:</span> <span id="home-opponent-gamma">Loading...</span></p>
+                            <p><span class="font-semibold text-gray-100">Confidence:</span> <span id="home-confidence-gamma">Loading...</span></p>
+                            <p class="mt-4 pt-4 border-t border-gray-600"><span class="font-semibold text-gray-100">Overall Success:</span> <span id="home-success-gamma">Loading...</span></p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+             <!-- Weekly Picks Page -->
+            <div id="weekly-picks" class="page hidden">
+                <h1 class="font-bungee text-4xl mb-8 text-center text-white">Consolidated Weekly Picks</h1>
+                <div class="bg-gray-800 rounded-lg shadow-lg overflow-x-auto border border-gray-700">
+                    <table class="min-w-full text-sm">
+                        <thead class="table-header">
+                            <tr>
+                                <th class="py-3 px-4 text-left">Game</th>
+                                <th class="py-3 px-4 text-left">Regular Memory Model</th>
+                                <th class="py-3 px-4 text-left">Long Memory Model</th>
+                                <th class="py-3 px-4 text-left">Short Memory Model</th>
+                            </tr>
+                        </thead>
+                        <tbody id="weekly-picks-data" class="divide-y divide-gray-700">
+                           <tr><td colspan="4" class="text-center p-8">Loading weekly picks...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <!-- Regular Memory Model Page -->
+            <div id="model1" class="page hidden">
+                <h1 class="font-bungee text-4xl mb-2 text-center text-white">Regular Memory Model</h1>
+                <h2 class="font-bungee text-3xl mt-8 mb-4 text-center text-white">Current Week Predictions</h2>
+                <div class="bg-gray-800 rounded-lg shadow-lg overflow-x-auto border border-gray-700 mb-12">
+                     <table class="min-w-full text-sm">
+                        <thead class="table-header">
+                            <tr>
+                                <th class="py-3 px-4 text-left">Current Week</th>
+                                <th class="py-3 px-4 text-left">Model's Pick</th>
+                                <th class="py-3 px-4 text-left">Opponent</th>
+                                <th class="py-3 px-4 text-left">Model's Confidence</th>
+                            </tr>
+                        </thead>
+                        <tbody id="model1-current-data" class="divide-y divide-gray-700">
+                           <tr><td colspan="4" class="text-center p-8">Loading current predictions...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <h2 class="font-bungee text-3xl mt-8 mb-2 text-center text-white">Model History</h2>
+                <h3 id="success-rate-alpha" class="text-2xl text-center text-gray-300 mb-6"></h3>
+                <div class="mb-4 flex justify-end space-x-4">
+                    <div>
+                        <label for="season-filter-alpha" class="mr-2 self-center">Filter by Season:</label>
+                        <select id="season-filter-alpha" class="filter-select p-2"></select>
+                    </div>
+                    <div>
+                        <label for="week-filter-alpha" class="mr-2 self-center">Filter by Week:</label>
+                        <select id="week-filter-alpha" class="filter-select p-2"></select>
+                    </div>
+                </div>
+                <div class="bg-gray-800 rounded-lg shadow-lg overflow-x-auto border border-gray-700">
+                    <table class="min-w-full text-sm">
+                        <thead class="table-header">
+                            <tr>
+                                <th class="py-3 px-4 text-left">NFL Season</th>
+                                <th class="py-3 px-4 text-left">Week</th>
+                                <th class="py-3 px-4 text-left">Predicted Winner</th>
+                                <th class="py-3 px-4 text-left">Confidence</th>
+                                <th class="py-3 px-4 text-left">Result</th>
+                            </tr>
+                        </thead>
+                        <tbody id="model1-data" class="divide-y divide-gray-700">
+                            <tr><td colspan="5" class="text-center p-8">Loading data from Google Sheet...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Long Memory Model Page -->
+            <div id="model2" class="page hidden">
+                <h1 class="font-bungee text-4xl mb-2 text-center text-white">Long Memory Model</h1>
+                 <h2 class="font-bungee text-3xl mt-8 mb-4 text-center text-white">Current Week Predictions</h2>
+                <div class="bg-gray-800 rounded-lg shadow-lg overflow-x-auto border border-gray-700 mb-12">
+                     <table class="min-w-full text-sm">
+                        <thead class="table-header">
+                            <tr>
+                                <th class="py-3 px-4 text-left">Current Week</th>
+                                <th class="py-3 px-4 text-left">Model's Pick</th>
+                                <th class="py-3 px-4 text-left">Opponent</th>
+                                <th class="py-3 px-4 text-left">Model's Confidence</th>
+                            </tr>
+                        </thead>
+                        <tbody id="model2-current-data" class="divide-y divide-gray-700">
+                           <tr><td colspan="4" class="text-center p-8">Loading current predictions...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <h2 class="font-bungee text-3xl mt-8 mb-2 text-center text-white">Model History</h2>
+                <h3 id="success-rate-beta" class="text-2xl text-center text-gray-300 mb-6"></h3>
+                <div class="mb-4 flex justify-end space-x-4">
+                    <div>
+                        <label for="season-filter-beta" class="mr-2 self-center">Filter by Season:</label>
+                        <select id="season-filter-beta" class="filter-select p-2"></select>
+                    </div>
+                    <div>
+                        <label for="week-filter-beta" class="mr-2 self-center">Filter by Week:</label>
+                        <select id="week-filter-beta" class="filter-select p-2"></select>
+                    </div>
+                </div>
+                <div class="bg-gray-800 rounded-lg shadow-lg overflow-x-auto border border-gray-700">
+                    <table class="min-w-full text-sm">
+                        <thead class="table-header">
+                            <tr>
+                                <th class="py-3 px-4 text-left">NFL Season</th>
+                                <th class="py-3 px-4 text-left">Week</th>
+                                <th class="py-3 px-4 text-left">Predicted Winner</th>
+                                <th class="py-3 px-4 text-left">Confidence</th>
+                                <th class="py-3 px-4 text-left">Result</th>
+                            </tr>
+                        </thead>
+                        <tbody id="model2-data" class="divide-y divide-gray-700">
+                            <tr><td colspan="5" class="text-center p-8">Loading data from Google Sheet...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Short Memory Model Page -->
+            <div id="model3" class="page hidden">
+                <h1 class="font-bungee text-4xl mb-2 text-center text-white">Short Memory Model</h1>
+                <h2 class="font-bungee text-3xl mt-8 mb-4 text-center text-white">Current Week Predictions</h2>
+                <div class="bg-gray-800 rounded-lg shadow-lg overflow-x-auto border border-gray-700 mb-12">
+                    <table class="min-w-full text-sm">
+                        <thead class="table-header">
+                            <tr>
+                                <th class="py-3 px-4 text-left">Current Week</th>
+                                <th class="py-3 px-4 text-left">Model's Pick</th>
+                                <th class="py-3 px-4 text-left">Opponent</th>
+                                <th class="py-3 px-4 text-left">Model's Confidence</th>
+                            </tr>
+                        </thead>
+                        <tbody id="model3-current-data" class="divide-y divide-gray-700">
+                           <tr><td colspan="4" class="text-center p-8">Loading current predictions...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <h2 class="font-bungee text-3xl mt-8 mb-2 text-center text-white">Model History</h2>
+                <h3 id="success-rate-gamma" class="text-2xl text-center text-gray-300 mb-6"></h3>
+                 <div class="mb-4 flex justify-end space-x-4">
+                    <div>
+                        <label for="season-filter-gamma" class="mr-2 self-center">Filter by Season:</label>
+                        <select id="season-filter-gamma" class="filter-select p-2"></select>
+                    </div>
+                    <div>
+                        <label for="week-filter-gamma" class="mr-2 self-center">Filter by Week:</label>
+                        <select id="week-filter-gamma" class="filter-select p-2"></select>
+                    </div>
+                </div>
+                <div class="bg-gray-800 rounded-lg shadow-lg overflow-x-auto border border-gray-700">
+                    <table class="min-w-full text-sm">
+                         <thead class="table-header">
+                            <tr>
+                                <th class="py-3 px-4 text-left">NFL Season</th>
+                                <th class="py-3 px-4 text-left">Week</th>
+                                <th class="py-3 px-4 text-left">Predicted Winner</th>
+                                <th class="py-3 px-4 text-left">Confidence</th>
+                                <th class="py-3 px-4 text-left">Result</th>
+                            </tr>
+                        </thead>
+                        <tbody id="model3-data" class="divide-y divide-gray-700">
+                           <tr><td colspan="5" class="text-center p-8">Loading data from Google Sheet...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center py-8">
+        <p class="text-gray-300 text-sm">
+            If you feel inclined to compensate me financially for these picks that can be done
+            <a href="https://buymeacoffee.com/ai_nfl_predictor" target="_blank" rel="noopener noreferrer" class="text-green-400 hover:underline">here</a>.
+        </p>
+    </footer>
+
+
+    <script>
+        // Store parsed data globally to avoid re-parsing
+        let parsedDataAlpha = { history: [], current: [] };
+        let parsedDataBeta = { history: [], current: [] };
+        let parsedDataGamma = { history: [], current: [] };
+        let weeklyPicks = {};
+
+        // --- Page Navigation Logic ---
+        const pages = document.querySelectorAll('.page');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        function showPage(pageId, clickedLink) {
+            pages.forEach(page => page.classList.add('hidden'));
+            const activePage = document.getElementById(pageId);
+            if (activePage) activePage.classList.remove('hidden');
+            
+            navLinks.forEach(link => link.classList.remove('active'));
+            if (clickedLink) {
+                const targetHref = clickedLink.getAttribute('href');
+                document.querySelectorAll(`.nav-link[href='${targetHref}']`).forEach(link => {
+                    link.classList.add('active');
+                });
+            }
+        }
+
+        // --- Mobile Menu Logic ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        
+        // --- Generic function to render a table and update success rate ---
+        function renderTable(model) {
+            const { data, seasonFilterId, weekFilterId, tableBodyId, successRateId } = model;
+            const seasonFilter = document.getElementById(seasonFilterId);
+            const weekFilter = document.getElementById(weekFilterId);
+            const tableBody = document.getElementById(tableBodyId);
+            const successRateEl = document.getElementById(successRateId);
+
+            if (!tableBody || !successRateEl || !seasonFilter || !weekFilter) return;
+            
+            const filterSeason = seasonFilter.value;
+            const filterWeek = weekFilter.value;
+
+            tableBody.innerHTML = '';
+            
+            let filteredRows = data;
+            if (filterSeason !== 'all') {
+                filteredRows = filteredRows.filter(row => row[0] === filterSeason);
+            }
+            if (filterWeek !== 'all') {
+                filteredRows = filteredRows.filter(row => row[1] === filterWeek);
+            }
+
+            const correctPredictions = filteredRows.filter(row => row[4] === 'TRUE').length;
+            const totalPredictions = filteredRows.length;
+
+            let successLabel = 'Overall';
+            if (filterSeason !== 'all') {
+                successLabel = `${filterSeason} Season`;
+                if (filterWeek !== 'all') {
+                    successLabel += `, ${filterWeek}`;
+                }
+            } else if (filterWeek !== 'all') {
+                 successLabel = `All Seasons, ${filterWeek}`;
+            }
+
+            if (totalPredictions > 0) {
+                const percentage = (correctPredictions / totalPredictions) * 100;
+                successRateEl.innerHTML = `${successLabel} Success Rate: <span class="correct-pick">${percentage.toFixed(2)}%</span> (${correctPredictions}/${totalPredictions})`;
+            } else {
+                successRateEl.textContent = 'No prediction data available for this selection.';
+            }
+
+            if (filteredRows.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="5" class="text-center p-8">No data found for this selection.</td></tr>';
+                return;
+            }
+
+            filteredRows.forEach((columns, index) => {
+                const [nflSeason, week, predictedWinner, confidence, score] = columns;
+                const resultText = score === 'TRUE' ? 'Correct' : 'Incorrect';
+                const resultClass = score === 'TRUE' ? 'correct-pick' : 'incorrect-pick';
+                const rowBgClass = index % 2 === 0 ? '' : 'bg-gray-900/50';
+
+                const tr = document.createElement('tr');
+                tr.className = rowBgClass;
+                tr.innerHTML = `
+                    <td class="py-3 px-4">${nflSeason}</td>
+                    <td class="py-3 px-4">${week}</td>
+                    <td class="py-3 px-4">${predictedWinner}</td>
+                    <td class="py-3 px-4">${confidence}</td>
+                    <td class="py-3 px-4 ${resultClass}">${resultText}</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        function updateWeekFilter(model) {
+            const { data, seasonFilterId, weekFilterId } = model;
+            const seasonFilter = document.getElementById(seasonFilterId);
+            const weekFilter = document.getElementById(weekFilterId);
+            const selectedSeason = seasonFilter.value;
+
+            const relevantRows = selectedSeason === 'all'
+                ? data
+                : data.filter(row => row[0] === selectedSeason);
+            
+            const weeks = [...new Set(relevantRows.map(row => row[1]))];
+            weekFilter.innerHTML = '<option value="all">All Weeks</option>';
+            weeks.forEach(week => {
+                const option = document.createElement('option');
+                option.value = week;
+                option.textContent = week;
+                weekFilter.appendChild(option);
+            });
+        }
+        
+        function renderCurrentPredictions(model) {
+            const { currentData, currentTableBodyId } = model;
+            const tableBody = document.getElementById(currentTableBodyId);
+            if (!tableBody) return;
+
+            tableBody.innerHTML = '';
+            if (currentData.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="4" class="text-center p-8">No current predictions found.</td></tr>';
+                return;
+            }
+
+            currentData.forEach((columns, index) => {
+                const [week, pick, opponent, confidence] = columns;
+                const rowBgClass = index % 2 === 0 ? '' : 'bg-gray-900/50';
+                const tr = document.createElement('tr');
+                tr.className = rowBgClass;
+                tr.innerHTML = `
+                    <td class="py-3 px-4">${week}</td>
+                    <td class="py-3 px-4">${pick}</td>
+                    <td class="py-3 px-4">${opponent}</td>
+                    <td class="py-3 px-4">${confidence}</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+        
+        function renderWeeklyPicks() {
+            const tableBody = document.getElementById('weekly-picks-data');
+            if (!tableBody) return;
+            tableBody.innerHTML = '';
+            
+            const games = Object.values(weeklyPicks);
+            if (games.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="4" class="text-center p-8">No weekly picks available.</td></tr>';
+                return;
+            }
+
+            games.forEach((game, index) => {
+                const rowBgClass = index % 2 === 0 ? '' : 'bg-gray-900/50';
+                const tr = document.createElement('tr');
+                tr.className = rowBgClass;
+                tr.innerHTML = `
+                    <td class="py-3 px-4">${game.game}</td>
+                    <td class="py-3 px-4">${game.modelAlpha}</td>
+                    <td class="py-3 px-4">${game.modelBeta}</td>
+                    <td class="py-3 px-4">${game.modelGamma}</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        // --- Generic function to fetch and process data for a model ---
+        async function setupModelPage(model) {
+            const { sheetId, gid, dataTarget, seasonFilterId, weekFilterId, tableBodyId, successRateId, currentGid, currentTableBodyId, homeCardIds, modelKey } = model;
+            const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&gid=${gid}`;
+            
+            const tableBody = document.getElementById(tableBodyId);
+            const seasonFilter = document.getElementById(seasonFilterId);
+            const weekFilter = document.getElementById(weekFilterId);
+            const getCellVal = (cell) => cell ? (cell.f !== undefined && cell.f !== null ? cell.f : cell.v) : null;
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Network response was not ok');
+                const responseText = await response.text();
+                
+                const jsonString = responseText.substring(responseText.indexOf('(') + 1, responseText.lastIndexOf(')'));
+                const json = JSON.parse(jsonString);
+                const dataRows = json.table.rows;
+                
+                let lastSeason = '';
+                const historicalData = [];
+                
+                dataRows.forEach(row => {
+                    const allColumns = row.c.map(getCellVal);
+
+                    if (allColumns[0] !== null || allColumns[1] !== null) {
+                        let currentSeason = allColumns[7];
+                        if (currentSeason && String(currentSeason).trim() !== '') {
+                            lastSeason = currentSeason;
+                        } else {
+                            currentSeason = lastSeason;
+                        }
+                        
+                        let week = String(allColumns[0]).trim();
+                        if (week === '' || week === 'null') {
+                           const playoffWeek = String(allColumns[1]).trim();
+                           if (["Wildcard", "Divisional", "Conference", "Super Bowl"].includes(playoffWeek)) {
+                               week = playoffWeek;
+                           } else if (playoffWeek && playoffWeek !== 'null') {
+                               week = "Playoffs";
+                           }
+                        }
+
+                        if (week && allColumns[1] && currentSeason) {
+                             historicalData.push([
+                                currentSeason,
+                                week,
+                                allColumns[1],
+                                allColumns[5],
+                                String(allColumns[3]).toUpperCase()
+                            ]);
+                        }
+                    }
+                });
+
+                model[dataTarget] = historicalData;
+
+                const seasons = [...new Set(model[dataTarget].map(row => row[0]))];
+                seasonFilter.innerHTML = '<option value="all">All Seasons</option>';
+                seasons.forEach(season => {
+                    const option = document.createElement('option');
+                    option.value = season;
+                    option.textContent = season;
+                    seasonFilter.appendChild(option);
+                });
+
+                updateWeekFilter(model);
+                
+                seasonFilter.addEventListener('change', () => {
+                    updateWeekFilter(model);
+                    renderTable(model);
+                });
+                weekFilter.addEventListener('change', () => renderTable(model));
+
+                renderTable(model);
+
+            } catch (error) {
+                console.error(`Error for ${model.name}:`, error);
+                if (tableBody) tableBody.innerHTML = `<tr><td colspan="5" class="text-center p-8 text-red-400">Failed to load data for ${model.name}.</td></tr>`;
+                document.getElementById(successRateId).textContent = `Could not calculate success rate for ${model.name}.`;
+            }
+
+            // Fetch current predictions if applicable
+            if (currentGid && currentTableBodyId) {
+                const currentUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&gid=${currentGid}`;
+                try {
+                    const currentResponse = await fetch(currentUrl);
+                    if (!currentResponse.ok) throw new Error('Network response for current predictions was not ok');
+                    const currentText = await currentResponse.text();
+                    const currentJsonString = currentText.substring(currentText.indexOf('(') + 1, currentText.lastIndexOf(')'));
+                    const currentJson = JSON.parse(currentJsonString);
+                    const currentRows = currentJson.table.rows;
+
+                    model.currentData = currentRows.map(row => {
+                        const allColumns = row.c.map(getCellVal);
+                        return [
+                            allColumns[0], // Column A
+                            allColumns[1], // Column B
+                            allColumns[2], // Column C
+                            allColumns[3]  // Column D
+                        ];
+                    }).filter(row => row[0] && row[0].trim() !== '');
+
+                    renderCurrentPredictions(model);
+                    
+                    // Update homepage card and consolidated picks
+                    if (homeCardIds) {
+                        const correct = model.data.filter(row => row[4] === 'TRUE').length;
+                        const total = model.data.length;
+                        const successRate = total > 0 ? (correct / total * 100).toFixed(2) + '%' : 'N/A';
+                        document.getElementById(homeCardIds.success).textContent = successRate;
+
+                        let topPick = { pick: 'N/A', opponent: 'N/A', confidence: 'N/A', confidenceVal: 0 };
+                        model.currentData.forEach(row => {
+                            const [week, pick, opponent, confidence] = row;
+                            const confidenceVal = parseFloat(confidence);
+                            if (confidenceVal > topPick.confidenceVal) {
+                                topPick = { pick, opponent, confidence, confidenceVal };
+                            }
+                            
+                            // Consolidate picks
+                            const gameKey = [pick, opponent].sort().join(' vs ');
+                            if (!weeklyPicks[gameKey]) {
+                                weeklyPicks[gameKey] = { game: `${pick} vs. ${opponent}`, modelAlpha: 'N/A', modelBeta: 'N/A', modelGamma: 'N/A' };
+                            }
+                            weeklyPicks[gameKey][modelKey] = pick;
+                        });
+                        document.getElementById(homeCardIds.pick).textContent = topPick.pick;
+                        document.getElementById(homeCardIds.opponent).textContent = topPick.opponent;
+                        document.getElementById(homeCardIds.confidence).textContent = topPick.confidence;
+                    }
+
+
+                } catch (error) {
+                    console.error(`Error for ${model.name} current predictions:`, error);
+                    const currentTableBody = document.getElementById(currentTableBodyId);
+                    if (currentTableBody) currentTableBody.innerHTML = `<tr><td colspan="4" class="text-center p-8 text-red-400">Failed to load current predictions.</td></tr>`;
+                }
+            }
+        }
+
+        // --- Initial Page Load ---
+        window.addEventListener('DOMContentLoaded', async () => {
+            const modelAlpha = {
+                name: 'Regular Memory Model',
+                sheetId: '1KkDk8IM11Ld3qLuABnd_DaqyrlRoyezNi6tlcsK9MLU',
+                gid: '0',
+                currentGid: '178307126',
+                data: parsedDataAlpha.history,
+                currentData: parsedDataAlpha.current,
+                dataTarget: 'data',
+                seasonFilterId: 'season-filter-alpha',
+                weekFilterId: 'week-filter-alpha',
+                tableBodyId: 'model1-data',
+                successRateId: 'success-rate-alpha',
+                currentTableBodyId: 'model1-current-data',
+                modelKey: 'modelAlpha',
+                homeCardIds: {
+                    pick: 'home-pick-alpha',
+                    opponent: 'home-opponent-alpha',
+                    confidence: 'home-confidence-alpha',
+                    success: 'home-success-alpha'
+                }
+            };
+
+            const modelBeta = {
+                name: 'Long Memory Model',
+                sheetId: '1KkDk8IM11Ld3qLuABnd_DaqyrlRoyezNi6tlcsK9MLU',
+                gid: '1614401839',
+                currentGid: '1412186829',
+                data: parsedDataBeta.history,
+                currentData: parsedDataBeta.current,
+                dataTarget: 'data',
+                seasonFilterId: 'season-filter-beta',
+                weekFilterId: 'week-filter-beta',
+                tableBodyId: 'model2-data',
+                successRateId: 'success-rate-beta',
+                currentTableBodyId: 'model2-current-data',
+                 modelKey: 'modelBeta',
+                homeCardIds: {
+                    pick: 'home-pick-beta',
+                    opponent: 'home-opponent-beta',
+                    confidence: 'home-confidence-beta',
+                    success: 'home-success-beta'
+                }
+            };
+
+            const modelGamma = {
+                name: 'Short Memory Model',
+                sheetId: '1KkDk8IM11Ld3qLuABnd_DaqyrlRoyezNi6tlcsK9MLU',
+                gid: '1391004388',
+                currentGid: '1491301748',
+                data: parsedDataGamma.history,
+                currentData: parsedDataGamma.current,
+                dataTarget: 'data',
+                seasonFilterId: 'season-filter-gamma',
+                weekFilterId: 'week-filter-gamma',
+                tableBodyId: 'model3-data',
+                successRateId: 'success-rate-gamma',
+                currentTableBodyId: 'model3-current-data',
+                modelKey: 'modelGamma',
+                homeCardIds: {
+                    pick: 'home-pick-gamma',
+                    opponent: 'home-opponent-gamma',
+                    confidence: 'home-confidence-gamma',
+                    success: 'home-success-gamma'
+                }
+            };
+
+            await Promise.all([
+                setupModelPage(modelAlpha),
+                setupModelPage(modelBeta),
+                setupModelPage(modelGamma)
+            ]);
+            
+            renderWeeklyPicks();
+
+            const hash = window.location.hash.substring(1);
+            if (hash && document.getElementById(hash)) {
+                const link = document.querySelector(`.nav-link[href='#${hash}']`);
+                showPage(hash, link);
+            } else {
+                showPage('home', document.querySelector('.nav-link[href="#home"]'));
+            }
+        });
+
+        // Update page on hash change
+        window.addEventListener('hashchange', () => {
+            const hash = window.location.hash.substring(1);
+            const link = document.querySelector(`.nav-link[href='#${hash}']`);
+            showPage(hash || 'home', link || document.querySelector('.nav-link[href="#home"]'));
+        });
+    </script>
+</body>
+</html>
