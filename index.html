@@ -666,6 +666,9 @@
                 
                 const jsonString = responseText.substring(responseText.indexOf('(') + 1, responseText.lastIndexOf(')'));
                 const json = JSON.parse(jsonString);
+                
+                // The Google Viz API returns data rows in `json.table.rows`
+                // and headers in `json.table.cols`. We will start from the first data row.
                 const dataRows = json.table.rows;
 
                 if (dataRows.length === 0) {
@@ -673,11 +676,17 @@
                     return;
                 }
                 
-                // Set headers from the first row
-                const headers = dataRows[0].c.slice(0, 4).map(getCellVal);
-                tableHeader.innerHTML = headers.map(h => `<th class="py-3 px-4 text-left">${h}</th>`).join('');
+                // Set hardcoded headers
+                tableHeader.innerHTML = `
+                    <th class="py-3 px-4 text-left">Game</th>
+                    <th class="py-3 px-4 text-left">Risk</th>
+                    <th class="py-3 px-4 text-left">Potential Profit</th>
+                    <th class="py-3 px-4 text-left">Result ($)</th>
+                `;
 
-                // Get note from E1
+                // Get note from E1 - This logic is likely flawed if the note is not on the first data row.
+                // Assuming the note might be in a header or specific cell, this may need adjustment if the sheet layout changes.
+                // For now, we will attempt to get it from the first row object if it exists.
                 if (dataRows[0].c.length > 4) {
                     const e1Value = getCellVal(dataRows[0].c[4]);
                     if (noteEl && e1Value) {
@@ -688,8 +697,8 @@
                 let totalProfit = 0;
                 tableBody.innerHTML = '';
 
-                // Start from row 1 to skip header row
-                for (let i = 1; i < dataRows.length; i++) {
+                // Start from the first row of data (index 0)
+                for (let i = 0; i < dataRows.length; i++) {
                     const row = dataRows[i];
                     const allColumns = row.c.map(getCellVal);
                     const colA = allColumns[0];
@@ -701,7 +710,7 @@
                          totalProfit += profitLossVal;
                         
                         const profitClass = profitLossVal > 0 ? 'correct-pick' : (profitLossVal < 0 ? 'incorrect-pick' : '');
-                        const rowBgClass = (i-1) % 2 === 0 ? '' : 'bg-gray-900/50';
+                        const rowBgClass = i % 2 === 0 ? '' : 'bg-gray-900/50';
                         const tr = document.createElement('tr');
                         tr.className = rowBgClass;
                         tr.innerHTML = `
@@ -819,5 +828,7 @@
     </script>
 </body>
 </html>
+
+
 
 
