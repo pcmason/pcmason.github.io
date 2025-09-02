@@ -76,6 +76,7 @@
             <div class="hidden md:flex space-x-8">
                 <a href="#home" class="nav-link text-gray-300 hover:text-green-400 transition duration-300 active" onclick="showPage('home', this)">Home</a>
                 <a href="#weekly-picks" class="nav-link text-gray-300 hover:text-green-400 transition duration-300" onclick="showPage('weekly-picks', this)">Weekly Picks</a>
+                <a href="#profit-loss" class="nav-link text-gray-300 hover:text-green-400 transition duration-300" onclick="showPage('profit-loss', this)">Profit/Loss</a>
                 <a href="#model1" class="nav-link text-gray-300 hover:text-green-400 transition duration-300" onclick="showPage('model1', this)">Regular Memory Model</a>
                 <a href="#model2" class="nav-link text-gray-300 hover:text-green-400 transition duration-300" onclick="showPage('model2', this)">Long Memory Model</a>
                 <a href="#model3" class="nav-link text-gray-300 hover:text-green-400 transition duration-300" onclick="showPage('model3', this)">Short Memory Model</a>
@@ -89,6 +90,7 @@
         <div id="mobile-menu" class="hidden md:hidden bg-gray-800/90 px-6 pb-4">
             <a href="#home" class="block py-2 text-gray-300 hover:text-green-400" onclick="showPage('home', this); toggleMenu();">Home</a>
             <a href="#weekly-picks" class="block py-2 text-gray-300 hover:text-green-400" onclick="showPage('weekly-picks', this); toggleMenu();">Weekly Picks</a>
+            <a href="#profit-loss" class="block py-2 text-gray-300 hover:text-green-400" onclick="showPage('profit-loss', this); toggleMenu();">Profit/Loss</a>
             <a href="#model1" class="block py-2 text-gray-300 hover:text-green-400" onclick="showPage('model1', this); toggleMenu();">Regular Memory Model</a>
             <a href="#model2" class="block py-2 text-gray-300 hover:text-green-400" onclick="showPage('model2', this); toggleMenu();">Long Memory Model</a>
             <a href="#model3" class="block py-2 text-gray-300 hover:text-green-400" onclick="showPage('model3', this); toggleMenu();">Short Memory Model</a>
@@ -158,6 +160,25 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+            
+            <!-- Profit/Loss Page -->
+            <div id="profit-loss" class="page hidden">
+                <h1 class="font-bungee text-4xl mb-2 text-center text-white">Profit/Loss Summary</h1>
+                 <h2 id="total-profit-loss" class="text-3xl text-center mb-8">Calculating...</h2>
+                <div class="bg-gray-800 rounded-lg shadow-lg overflow-x-auto border border-gray-700">
+                    <table class="min-w-full text-sm">
+                        <thead class="table-header">
+                            <tr id="profit-loss-header">
+                                <!-- Headers will be dynamically inserted here -->
+                            </tr>
+                        </thead>
+                        <tbody id="profit-loss-data" class="divide-y divide-gray-700">
+                           <tr><td colspan="4" class="text-center p-8">Loading data...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p id="profit-loss-note" class="text-center text-xs text-gray-400 mt-4"></p>
             </div>
 
 
@@ -313,7 +334,7 @@
     <!-- Footer -->
     <footer class="text-center py-8">
         <p class="text-gray-300 text-sm">
-            If you feel inclined to compensate me financially for these picks that can be done
+            If you feel inclined to compensate me financially for these picks that can be done 
             <a href="https://buymeacoffee.com/ai_nfl_predictor" target="_blank" rel="noopener noreferrer" class="text-green-400 hover:underline">here</a>.
         </p>
     </footer>
@@ -422,8 +443,8 @@
             const weekFilter = document.getElementById(weekFilterId);
             const selectedSeason = seasonFilter.value;
 
-            const relevantRows = selectedSeason === 'all'
-                ? data
+            const relevantRows = selectedSeason === 'all' 
+                ? data 
                 : data.filter(row => row[0] === selectedSeason);
             
             const weeks = [...new Set(relevantRows.map(row => row[1]))];
@@ -599,7 +620,7 @@
                         const successRate = total > 0 ? (correct / total * 100).toFixed(2) + '%' : 'N/A';
                         document.getElementById(homeCardIds.success).textContent = successRate;
 
-                        let topPick = { pick: 'N/A', opponent: 'N/A', confidence: 'N/A', confidenceVal: 0 };
+                        let topPick = { pick: 'NA', opponent: 'N/A', confidence: 'N/A', confidenceVal: 0 };
                         model.currentData.forEach(row => {
                             const [week, pick, opponent, confidence] = row;
                             const confidenceVal = parseFloat(confidence);
@@ -625,6 +646,81 @@
                     const currentTableBody = document.getElementById(currentTableBodyId);
                     if (currentTableBody) currentTableBody.innerHTML = `<tr><td colspan="4" class="text-center p-8 text-red-400">Failed to load current predictions.</td></tr>`;
                 }
+            }
+        }
+
+        async function setupProfitLossPage() {
+            const sheetId = '1KkDk8IM11Ld3qLuABnd_DaqyrlRoyezNi6tlcsK9MLU';
+            const gid = '241769757';
+            const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&gid=${gid}`;
+            const totalEl = document.getElementById('total-profit-loss');
+            const tableBody = document.getElementById('profit-loss-data');
+            const tableHeader = document.getElementById('profit-loss-header');
+            const noteEl = document.getElementById('profit-loss-note');
+            const getCellVal = (cell) => cell ? (cell.f !== undefined && cell.f !== null ? cell.f : cell.v) : null;
+            
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Network response was not ok');
+                const responseText = await response.text();
+                
+                const jsonString = responseText.substring(responseText.indexOf('(') + 1, responseText.lastIndexOf(')'));
+                const json = JSON.parse(jsonString);
+                const dataRows = json.table.rows;
+
+                if (dataRows.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="4" class="text-center p-8">No Profit/Loss data found.</td></tr>`;
+                    return;
+                }
+                
+                // Set headers from the first row
+                const headers = dataRows[0].c.slice(0, 4).map(getCellVal);
+                tableHeader.innerHTML = headers.map(h => `<th class="py-3 px-4 text-left">${h}</th>`).join('');
+
+                // Get note from E1
+                if (dataRows[0].c.length > 4) {
+                    const e1Value = getCellVal(dataRows[0].c[4]);
+                    if (noteEl && e1Value) {
+                        noteEl.textContent = e1Value;
+                    }
+                }
+                
+                let totalProfit = 0;
+                tableBody.innerHTML = '';
+
+                // Start from row 1 to skip header row
+                for (let i = 1; i < dataRows.length; i++) {
+                    const row = dataRows[i];
+                    const allColumns = row.c.map(getCellVal);
+                    const colA = allColumns[0];
+                    const colB = allColumns[1];
+                    const colC = allColumns[2];
+                    const profitLossVal = parseFloat(allColumns[3]); // Column D
+
+                    if (colA && colB && !isNaN(profitLossVal)) {
+                         totalProfit += profitLossVal;
+                        
+                        const profitClass = profitLossVal > 0 ? 'correct-pick' : (profitLossVal < 0 ? 'incorrect-pick' : '');
+                        const rowBgClass = (i-1) % 2 === 0 ? '' : 'bg-gray-900/50';
+                        const tr = document.createElement('tr');
+                        tr.className = rowBgClass;
+                        tr.innerHTML = `
+                            <td class="py-3 px-4">${colA}</td>
+                            <td class="py-3 px-4">${colB}</td>
+                            <td class="py-3 px-4">${colC}</td>
+                            <td class="py-3 px-4 ${profitClass}">$${profitLossVal.toFixed(2)}</td>
+                        `;
+                        tableBody.appendChild(tr);
+                    }
+                }
+
+                const totalProfitClass = totalProfit > 0 ? 'correct-pick' : (totalProfit < 0 ? 'incorrect-pick' : 'text-gray-300');
+                totalEl.innerHTML = `Total Profit/Loss: <span class="${totalProfitClass}">$${totalProfit.toFixed(2)}</span>`;
+
+            } catch (error) {
+                console.error('Error fetching Profit/Loss data:', error);
+                tableBody.innerHTML = `<tr><td colspan="4" class="text-center p-8 text-red-400">Failed to load Profit/Loss data.</td></tr>`;
+                totalEl.textContent = 'Could not calculate total profit.';
             }
         }
 
@@ -699,7 +795,8 @@
             await Promise.all([
                 setupModelPage(modelAlpha),
                 setupModelPage(modelBeta),
-                setupModelPage(modelGamma)
+                setupModelPage(modelGamma),
+                setupProfitLossPage()
             ]);
             
             renderWeeklyPicks();
@@ -722,3 +819,5 @@
     </script>
 </body>
 </html>
+
+
