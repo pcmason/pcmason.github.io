@@ -174,7 +174,7 @@
                             </tr>
                         </thead>
                         <tbody id="profit-loss-data" class="divide-y divide-gray-700">
-                           <tr><td colspan="4" class="text-center p-8">Loading data...</td></tr>
+                           <tr><td colspan="5" class="text-center p-8">Loading data...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -667,26 +667,23 @@
                 const jsonString = responseText.substring(responseText.indexOf('(') + 1, responseText.lastIndexOf(')'));
                 const json = JSON.parse(jsonString);
                 
-                // The Google Viz API returns data rows in `json.table.rows`
-                // and headers in `json.table.cols`. We will start from the first data row.
                 const dataRows = json.table.rows;
 
                 if (dataRows.length === 0) {
-                    tableBody.innerHTML = `<tr><td colspan="4" class="text-center p-8">No Profit/Loss data found.</td></tr>`;
+                    tableBody.innerHTML = `<tr><td colspan="5" class="text-center p-8">No Profit/Loss data found.</td></tr>`;
                     return;
                 }
                 
                 // Set hardcoded headers
                 tableHeader.innerHTML = `
                     <th class="py-3 px-4 text-left">Game</th>
+                    <th class="py-3 px-4 text-left">Team Picked</th>
                     <th class="py-3 px-4 text-left">Risk</th>
                     <th class="py-3 px-4 text-left">Potential Profit</th>
                     <th class="py-3 px-4 text-left">Result ($)</th>
                 `;
 
-                // Get note from E1 - This logic is likely flawed if the note is not on the first data row.
-                // Assuming the note might be in a header or specific cell, this may need adjustment if the sheet layout changes.
-                // For now, we will attempt to get it from the first row object if it exists.
+                // Get note from E1 of the first data row
                 if (dataRows[0].c.length > 4) {
                     const e1Value = getCellVal(dataRows[0].c[4]);
                     if (noteEl && e1Value) {
@@ -701,12 +698,13 @@
                 for (let i = 0; i < dataRows.length; i++) {
                     const row = dataRows[i];
                     const allColumns = row.c.map(getCellVal);
-                    const colA = allColumns[0];
-                    const colB = allColumns[1];
-                    const colC = allColumns[2];
-                    const profitLossVal = parseFloat(allColumns[3]); // Column D
+                    const game = allColumns[0];
+                    const teamPicked = allColumns[1]; // Column B
+                    const risk = allColumns[2];
+                    const potentialProfit = allColumns[3];
+                    const profitLossVal = parseFloat(allColumns[4]); // Column E
 
-                    if (colA && colB && !isNaN(profitLossVal)) {
+                    if (game && teamPicked && !isNaN(profitLossVal)) {
                          totalProfit += profitLossVal;
                         
                         const profitClass = profitLossVal > 0 ? 'correct-pick' : (profitLossVal < 0 ? 'incorrect-pick' : '');
@@ -714,9 +712,10 @@
                         const tr = document.createElement('tr');
                         tr.className = rowBgClass;
                         tr.innerHTML = `
-                            <td class="py-3 px-4">${colA}</td>
-                            <td class="py-3 px-4">${colB}</td>
-                            <td class="py-3 px-4">${colC}</td>
+                            <td class="py-3 px-4">${game}</td>
+                            <td class="py-3 px-4">${teamPicked}</td>
+                            <td class="py-3 px-4">${risk}</td>
+                            <td class="py-3 px-4">${potentialProfit}</td>
                             <td class="py-3 px-4 ${profitClass}">$${profitLossVal.toFixed(2)}</td>
                         `;
                         tableBody.appendChild(tr);
@@ -728,7 +727,7 @@
 
             } catch (error) {
                 console.error('Error fetching Profit/Loss data:', error);
-                tableBody.innerHTML = `<tr><td colspan="4" class="text-center p-8 text-red-400">Failed to load Profit/Loss data.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="5" class="text-center p-8 text-red-400">Failed to load Profit/Loss data.</td></tr>`;
                 totalEl.textContent = 'Could not calculate total profit.';
             }
         }
@@ -828,7 +827,6 @@
     </script>
 </body>
 </html>
-
 
 
 
